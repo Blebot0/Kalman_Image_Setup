@@ -5,27 +5,28 @@
 #include <gazebo-10/gazebo/transport/TransportTypes.hh>
 #include <gazebo/msgs/image_stamped.pb.h>
 #include <iostream>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/highgui.hpp>
 //// Function is called everytime a message is received.
 
 void camera_callback(ConstImageStampedPtr &msg){
 //  // Dump the message contents to stdout.
-    int width, height;
-    char* data;
+    //int width, height;
+    //char* data;
 
-    width =  (int) msg->image().width();
-    height = (int) msg->image().height();
-    data = new char[msg->image().data().length() + 1];
-    memcpy(data, msg->image().data().c_str(), msg->image().data().length());
+    //width =  (int) msg->image().width();
+    //height = (int) msg->image().height();
+    //data = new char[msg->image().data().length() + 1];
+    //memcpy(data, msg->image().data().c_str(), msg->image().data().length());
     
-    cv::Mat image(height, width, CV_8UC3, data);
-    delete data;
+
+    	cv::Mat mRGBAImg = cv::Mat(cv::Size(msg->image().width(),msg->image().height()),CV_8UC3);
+	memcpy(mRGBAImg.data,msg->image().data().c_str(),msg->image().data().size());
+	cv::imshow("Camera Feed", mRGBAImg);
+	cv::waitKey(3);
+
+    //cv::Mat image(height, width, CV_8UC3, data);
+    //delete data;
 }
 
 int main(int _argc, char **_argv){
