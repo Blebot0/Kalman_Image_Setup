@@ -1,5 +1,6 @@
-//	Name: Keshav Kapur
-//	Email: keshav29kapur@gmail.com
+// Name: Keshav Kapur
+// Email: keshav29kapur@gmail.com
+
 // Gazebo Libraries 
 #include <gazebo/gazebo_client.hh>
 #include <gazebo/transport/transport.hh>
@@ -12,21 +13,42 @@
 #include <iostream>
 
 // OpenCV Libraries
+#include <opencv2/core/base.hpp>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/types.hpp>
+#include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 
+cv::Mat Convolve2D(cv::Mat& image,const cv::Mat& kernel){
+	cv::Mat convolved(image);
+//	// Default anchor
+	cv::Point  anchor = cv::Point(-1, -1);
+
+//	// Same Depth Of Source and Destination Image
+	int ddepth = -1;
+
+// 	// Filter 2D src, destination, ddepth, kernel, anchor
+	cv::filter2D(image, convolved, ddepth, kernel, anchor, 0, cv::BORDER_DEFAULT);
+	
+	return convolved;
+}
 //// Function is called everytime a message is received.
 void camera_callback(ConstImageStampedPtr &msg){
 	
 //	// Setting up OpenCV image container to store the camera feedback
     	cv::Mat mRGBAImg = cv::Mat(cv::Size(msg->image().width(),msg->image().height()),CV_8UC3);
-
+	
 //	// Saving Camera Feedback Data to the image container
 	memcpy(mRGBAImg.data,msg->image().data().c_str(),msg->image().data().size());
+	
+	float kernel_data[] = {1, 0, 1, 1, 0, 1, 1, 0, 1};	
+	cv::Mat kernel(3, 3, *kernel_data);
+//	mRGBAImg = Convolve2D(mRGBAImg, kernel);	
 
 //	// Image Display Video Feedback
 	cv::imshow("Camera Feed", mRGBAImg);
-	cv::waitKey(3);
+	cv::waitKey(1);
 
 }
 

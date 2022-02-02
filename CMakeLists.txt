@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(gazebo REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(Eigen3 REQUIRED)
 ADD_DEFINITIONS(-DCV__ENABLE_C_API_CTORS)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -25,7 +26,7 @@ list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable(gazebo_fetch_camera src/gazebo_fetch_camera.cpp)
-target_link_libraries(gazebo_fetch_camera ${GAZEBO_LIBRARIES} ${OpenCV_LIBS} pthread)
+target_link_libraries(gazebo_fetch_camera Eigen3::Eigen ${GAZEBO_LIBRARIES} ${OpenCV_LIBS} pthread)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
