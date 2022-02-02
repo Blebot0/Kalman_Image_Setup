@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>marker_detection</name>
+  <name>kalman_implementation</name>
   <version>0.0.0</version>
-  <description>The marker_detection package</description>
+  <description>The kalman_implementation package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
