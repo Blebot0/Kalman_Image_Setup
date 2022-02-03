@@ -19,6 +19,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
+#include <../include/kalman_implementation/Kalman.hpp>
 
 cv::Mat Convolve2D(cv::Mat& image,const cv::Mat& kernel){
 	cv::Mat convolved(image);
@@ -33,18 +34,21 @@ cv::Mat Convolve2D(cv::Mat& image,const cv::Mat& kernel){
 	
 	return convolved;
 }
+
 //// Function is called everytime a message is received.
 void camera_callback(ConstImageStampedPtr &msg){
 	
+	kl::Kalman kf;
 //	// Setting up OpenCV image container to store the camera feedback
     	cv::Mat mRGBAImg = cv::Mat(cv::Size(msg->image().width(),msg->image().height()),CV_8UC3);
 	
 //	// Saving Camera Feedback Data to the image container
 	memcpy(mRGBAImg.data,msg->image().data().c_str(),msg->image().data().size());
 	
-	float kernel_data[] = {1, 0, 1, 1, 0, 1, 1, 0, 1};	
-	cv::Mat kernel(3, 3, *kernel_data);
-//	mRGBAImg = Convolve2D(mRGBAImg, kernel);	
+	cv::Mat kernel = kf.measurement();
+//	float kernel_data[] = {1, 0, 1, 1, 0, 1, 1, 0, 1};	
+//	cv::Mat kernel(3, 3, *kernel_data);
+	mRGBAImg = Convolve2D(mRGBAImg, kernel);	
 
 //	// Image Display Video Feedback
 	cv::imshow("Camera Feed", mRGBAImg);
