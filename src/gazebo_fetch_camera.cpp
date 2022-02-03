@@ -46,8 +46,6 @@ void camera_callback(ConstImageStampedPtr &msg){
 	memcpy(mRGBAImg.data,msg->image().data().c_str(),msg->image().data().size());
 	
 	cv::Mat kernel = kf.measurement();
-//	float kernel_data[] = {1, 0, 1, 1, 0, 1, 1, 0, 1};	
-//	cv::Mat kernel(3, 3, *kernel_data);
 	mRGBAImg = Convolve2D(mRGBAImg, kernel);	
 
 //	// Image Display Video Feedback
